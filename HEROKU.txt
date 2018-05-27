@@ -1,0 +1,31 @@
+1. Залогиниться: heroku login
+2. Перейти в репозиторий: cd desktop/heroku
+3. Клонирование репозитория: git clone https://github.com/heroku/node-js-getting-started.git
+4. Перейти в репозиторий проекта: cd node-js-getting-started
+5. Создание проекта на heroku: heroku create
+6. Запушить проект на heroku: git push heroku master
+7. Запустить проект: heroku open
+8. Просмотр информации о запущенном приложении: heroku logs --tail
+9. Проверить, сколько динамиков работает: heroku ps
+- масштбировать количество веб-динамиков до нуля: heroku ps:scale web=0
+- увеличиваем количество веб-динамиков до одного: heroku ps:scale web=1
+- создание package.json файла (если его нет): npm init --yes
+10. установить зависимости для локального запуска приложения: npm install
+11. Локально запустить приложение: heroku local web / heroku local
+
+12. git операции:
+- git add .
+- git commit -m "initial commit"
+- git push heroku master
+
+13. Запустить приложение на удаленном сервере: heroku open
+
+14. Предоставление одной из надстроек регистрации: heroku addons:create papertrail
+15. Пречислить надстройки для своего приложения:heroku addons
+16. Посетить консоль papertrail, чтобы просмотреть сообщения журнала: heroku addons:open papertrail
+
+- Просмотреть конфигурационные файлы: heroku config
+- Узнать значение конфигурационной переменной: heroku config:get MONGODB_URI
+- Установить конфигурационную переменную: heroku config:set TIMES=2
+
+- Перезапуск сервера: heroku restart -a secure-waters-60346
