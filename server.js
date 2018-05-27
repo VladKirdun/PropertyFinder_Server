@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
 const app = express();
 const router = express.Router();
+// const port = 3000;
 const port = process.env.PORT || 5000;
 const url = require('url');
 
@@ -16,6 +17,7 @@ var homes = require('./homes.json');
 var users = require('./users.json');
 
 var urlDB = "mongodb://heroku_h27flhnr:sradocqv54m1s2pql85nn13s7n@ds257838.mlab.com:57838/heroku_h27flhnr";
+// var urlDB = "mongodb://localhost:27017";
 
 // create application/json parser
 var jsonParser = bodyParser.json()
@@ -24,48 +26,52 @@ var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 // __________________________ HOMES __________________________ 
-MongoClient.connect(urlDB, function(err, database) {
-	if(err) throw err;
+// MongoClient.connect(urlDB, function(err, database) {
+// 	if(err) throw err;
 
-	console.log('Connection established!');
-	const myDB = database.db('heroku_h27flhnr');
-	const myDBCollection = myDB.collection('homes');
+// 	console.log('Connection established!');
+// 	const myDB = database.db('heroku_h27flhnr');
+// 	const myDBCollection = myDB.collection('homes');
 
-	//удаление коллекции из бд
-	myDBCollection.drop();
+// 	//удаление коллекции из бд
+// 	myDBCollection.drop();
 
-	//вставка нескольких строк(пар) в коллекцию
-	myDBCollection.insertMany(homes, function(err, result){
-		if(err) {
-			console.log(err);
-			return;
-		}		
-	});
-	database.close();
-});
+// 	//вставка нескольких строк(пар) в коллекцию
+// 	myDBCollection.insertMany(homes, function(err, result){
+// 		if(err) {
+// 			console.log(err);
+// 			return;
+// 		}		
+// 	});
+// 	database.close();
+// });
 
 // __________________________ USERS __________________________ 
-MongoClient.connect(urlDB, function(err, database) {
-	if(err) throw err;
+// MongoClient.connect(urlDB, function(err, database) {
+// 	if(err) throw err;
 
-	console.log('Connection established!');
-	const myDB = database.db('heroku_h27flhnr');
-	const myDBCollection = myDB.collection('users');
+// 	console.log('Connection established!');
+// 	const myDB = database.db('heroku_h27flhnr');
+// 	const myDBCollection = myDB.collection('users');
 
-	//удаление коллекции из бд
-	myDBCollection.drop();
+// 	//удаление коллекции из бд
+// 	myDBCollection.drop();
 
-	//вставка нескольких строк(пар) в коллекцию
-	myDBCollection.insertMany(users, function(err, result){
-		if(err) {
-			console.log(err);
-			return;
-		}
-	});
-	database.close();
-});
+// 	//вставка нескольких строк(пар) в коллекцию
+// 	myDBCollection.insertMany(users, function(err, result){
+// 		if(err) {
+// 			console.log(err);
+// 			return;
+// 		}
+// 	});
+// 	database.close();
+// });
 
 var key = 'qwertyuiopasdfghjklzxcvbnmqwerty';
+
+app.get('/', (req, res) => {
+	res.send('Hello, World!');
+});
 
 app.get('/api', (req, res) => {
 	res.json({
@@ -90,6 +96,7 @@ app.post('/api/posts', verifyToken, (req, res) => {
 app.post('/api/register', urlencodedParser, (req, res) => {
 	MongoClient.connect(urlDB, function(err, database) {
 		if(err) throw err;
+		// const myDB = database.db('property_finder');
 		const myDB = database.db('heroku_h27flhnr');
 		const myDBCollection = myDB.collection('users');
 
@@ -129,6 +136,7 @@ app.post('/api/register', urlencodedParser, (req, res) => {
 app.post('/api/login', urlencodedParser, (req, res) => {
 	MongoClient.connect(urlDB, function(err, database) {
 		if(err) throw err;
+		// const myDB = database.db('property_finder');
 		const myDB = database.db('heroku_h27flhnr');
 		const myDBCollection = myDB.collection('users');
 
@@ -185,13 +193,9 @@ function verifyToken(req, res, next) {
 	}
 }
 
-app.get('/api/posts/new', (request, response) => {
-	var urlParts = url.parse(request.url, true);
-  var parameters = urlParts.query;
-
-  var encdata = parameters.encdata;
+app.post('/api/posts/addhome', urlencodedParser, (request, response) => {
+  var encdata = request.body.encdata;
   encdata = encdata.replace(/ /g, '+');
-	parameters.encdata = encdata;
 
   var bytes  = CryptoJS.AES.decrypt(encdata, key);
 	var plaintext = bytes.toString(CryptoJS.enc.Utf8);
@@ -201,6 +205,7 @@ app.get('/api/posts/new', (request, response) => {
 
 	MongoClient.connect(urlDB, function(err, database) {
 		if(err) throw err;
+		// const myDB = database.db('property_finder');
 		const myDB = database.db('heroku_h27flhnr');
 		const myDBCollection = myDB.collection('homes');
 
@@ -233,6 +238,7 @@ app.get('/api/posts/homes', (request, response) => {
 
 	MongoClient.connect(urlDB, function(err, database) {
 		if(err) throw err;
+		// const myDB = database.db('property_finder');
 		const myDB = database.db('heroku_h27flhnr');
 		const myDBCollection = myDB.collection('homes');
 		
